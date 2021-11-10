@@ -64,39 +64,40 @@ class MainActivity : ComponentActivity() {
         }
 
     }
-}
 
-@Composable
-fun Results(entries: List<Entries>){
+    @Composable
+    fun Results(entries: List<Entries>){
+        LazyColumn{
+            items(entries){ entry ->
+                Column(
+                    Modifier
+                        .padding(8.dp, 4.dp, 8.dp, 4.dp)
+                        .background(
+                            color = if (isSystemInDarkTheme()) {
+                                OhBgUiDlgDark
+                            } else {
+                                OhBgUiDlg
+                            },
+                            shape = RoundedCornerShape(8.dp, 8.dp, 8.dp, 8.dp)
+                        )
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                ) {
 
-    LazyColumn{
-        items(entries){ entry ->
-            Column(
-                Modifier
-                    .padding(8.dp, 4.dp, 8.dp, 4.dp)
-                    .background(
-                        color = if (isSystemInDarkTheme()) {
-                            OhBgUiDlgDark
-                        } else {
-                            OhBgUiDlg
-                        },
-                        shape = RoundedCornerShape(8.dp, 8.dp, 8.dp, 8.dp)
+                    Text(
+                        text = entry.entry,
+                        fontSize = if(viewModel.queryWorld.value == entry.entry){ 24.sp }else{ 20.sp },
+                        fontWeight = if(viewModel.queryWorld.value == entry.entry){ FontWeight.Bold }else{ FontWeight.Normal }
                     )
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-            ) {
-
-                Text(
-                    text = entry.entry,
-//                    fontSize = if(reply.data.query == entry.entry){ 24.sp }else{ 20.sp },
-//                    fontWeight = if(reply.data.query == entry.entry){ FontWeight.Bold }else{ FontWeight.Normal }
-                )
-                Text(modifier = Modifier.fillMaxWidth(),text = entry.explain.replace(Regex("([a-z]+\\.[^.])"),"\n$1").trim(),fontSize = 16.sp)
+                    Text(modifier = Modifier.fillMaxWidth(),text = entry.explain.replace(Regex("([a-z]+\\.[^.])"),"\n$1").trim(),fontSize = 16.sp)
+                }
             }
         }
-    }
 
+    }
 }
+
+
 
 @Composable
 fun EditQueryWord(
