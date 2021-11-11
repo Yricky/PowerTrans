@@ -1,6 +1,5 @@
 package com.yricky.powertrans.model
 
-import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.yricky.powertrans.PTApp
@@ -9,9 +8,9 @@ import com.yricky.powertrans.utils.globalCxt
 import java.io.File
 
 object DataBaseModel{
-    private val cacheDB = DictContract.writableDatabase
-
-    private object DictContract:SQLiteOpenHelper(
+    private val cacheDB = DBHelper.writableDatabase
+    private val empty:List<Entries> = listOf()
+    private object DBHelper:SQLiteOpenHelper(
         globalCxt,
         File(globalCxt.getExternalFilesDir("cache"), "dict.db").path,
     null,2) {
@@ -35,27 +34,31 @@ object DataBaseModel{
 
     fun typeIn(entries: List<Entries>?,then:Runnable? = null){
         PTApp.tpe.execute {
+            cacheDB.beginTransaction()
             entries?.forEach {
                 val time = System.currentTimeMillis()
                 cacheDB.execSQL(
-                    DictContract.SQL_CMD_IOR,
+                    DBHelper.SQL_CMD_IOR,
                     arrayOf(it.entry,it.explain,time))
             }
+            cacheDB.setTransactionSuccessful()
+            cacheDB.endTransaction()
             then?.run()
         }
     }
 
     fun query(word:String):List<Entries>{
-
+        if(word.isEmpty())
+            return empty
         val cursor = cacheDB.query(
-            DictContract.TABLE_NAME,
-            arrayOf(DictContract.COLUMN_WORD,DictContract.COLUMN_EXPL),
-            "${DictContract.COLUMN_WORD} like ?",
+            DBHelper.TABLE_NAME,
+            arrayOf(DBHelper.COLUMN_WORD,DBHelper.COLUMN_EXPL),
+            "${DBHelper.COLUMN_WORD} like ?",
             arrayOf("$word%"),
             null,
             null,
-            DictContract.COLUMN_WORD,
-            "20"
+            DBHelper.COLUMN_WORD,
+            "512" /* limit */
             )
         cursor.moveToFirst()
         val list = ArrayList<Entries>(20).apply {
