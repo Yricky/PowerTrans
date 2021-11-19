@@ -5,6 +5,7 @@
  ## 技术特点
  - compose编写UI
  - sqlite缓存
+ - 线程池执行后台任务
  - 简单的MVVM架构
  ## WIP
  - 流量统计

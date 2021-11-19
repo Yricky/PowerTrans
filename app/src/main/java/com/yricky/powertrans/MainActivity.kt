@@ -1,7 +1,6 @@
 package com.yricky.powertrans
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -21,10 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
-import com.google.gson.Gson
-import com.yricky.powertrans.model.DataBaseModel
 import com.yricky.powertrans.pojo.youdao.Entries
-import com.yricky.powertrans.pojo.youdao.Reply
 import com.yricky.powertrans.ui.theme.OhBgUiDlg
 import com.yricky.powertrans.ui.theme.OhBgUiDlgDark
 import com.yricky.powertrans.ui.theme.PowerTransTheme
@@ -50,7 +46,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun ContentView(){
         Column {
-            val item by viewModel.rawJson.observeAsState()
+            val item by viewModel.entryList.observeAsState()
             val word by viewModel.queryWorld.observeAsState()
             EditQueryWord(
                 Modifier

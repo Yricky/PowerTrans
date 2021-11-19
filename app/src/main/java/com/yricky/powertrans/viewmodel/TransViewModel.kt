@@ -14,7 +14,7 @@ import java.io.IOException
 
 class TransViewModel:ViewModel() {
 
-    val rawJson: MutableLiveData<List<Entries>> = MutableLiveData<List<Entries>>()
+    val entryList: MutableLiveData<List<Entries>> = MutableLiveData<List<Entries>>()
     val queryWorld:MutableLiveData<String> = MutableLiveData<String>()
     private val handler:Handler = Handler(Looper.getMainLooper())
     private val client:OkHttpClient = OkHttpClient()
@@ -30,7 +30,7 @@ class TransViewModel:ViewModel() {
         handler.removeMessages(0)
         PTApp.tpe.execute {
             val list = DataBaseModel.query(word)
-            handler.post { rawJson.value = list }
+            handler.post { entryList.value = list }
         }
         handler.postDelayed({
             val url = "https://dict.youdao.com/suggest?q=$word&num=20&doctype=json"
@@ -47,7 +47,7 @@ class TransViewModel:ViewModel() {
                             val list = DataBaseModel.query(word)
                             if(queryWorld.value == word){
                                 handler.post{
-                                    rawJson.value = list
+                                    entryList.value = list
                                 }
                             }
 

@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 class PTApp :Application(){
     companion object{
         val tpe:ThreadPoolExecutor by lazy {
-            ThreadPoolExecutor(1,8,10L,TimeUnit.MILLISECONDS, LinkedBlockingQueue(64))
+            ThreadPoolExecutor(1,8,10L,TimeUnit.MILLISECONDS, LinkedBlockingQueue(12))
         }
         lateinit var inst:PTApp
     }

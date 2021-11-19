@@ -61,8 +61,9 @@ object DataBaseModel{
             "512" /* limit */
             )
         cursor.moveToFirst()
-        val list = ArrayList<Entries>(20).apply {
-            (0 until cursor.count.coerceAtLeast(0)).forEach{
+        val listSize = cursor.count.coerceAtLeast(0)
+        val list = ArrayList<Entries>(listSize).apply {
+            (0 until listSize).forEach{ _ ->
                 add(Entries().apply {
                     entry = cursor.getString(0)
                     explain = cursor.getString(1)
